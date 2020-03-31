@@ -9,12 +9,21 @@ DURATION=$6
 ELEVATION=$7
 DIRECTION=$8
 
-AUDIO_DIR=INSTALL_DIR/audio
-IMAGE_DIR=INSTALL_DIR/images
-LOG_DIR=INSTALL_DIR/logs
+source ./config.env
+
+AUDIO_DIR=${OUT_DIR}/audio
+IMAGE_DIR=${OUT_DIR}/images
+META_DIR=${OUT_DIR}/meta
+LOG_DIR=${OUT_DIR}/logs
 MAP_FILE=${IMAGE_DIR}/${FILEKEY}-map.png
 AUDIO_FILE=${AUDIO_DIR}/${FILEKEY}.wav
 LOGFILE=${LOG_DIR}/${FILEKEY}.log
+METAFILE=${META_DIR}/${FILEKEY}.txt
+
+mkdir -p $AUDIO_DIR
+mkdir -p $IMAGE_DIR
+mkdir -p $META_DIR
+mkdir -p $LOG_DIR
 
 echo $@ >> $LOGFILE
 
@@ -26,17 +35,12 @@ PassStart=`expr $START_TIME + 90`
 
 if [ -e $AUDIO_FILE ]
   then
-    /usr/local/bin/wxmap -T "${SAT}" -H $TLE_FILE -p 0 -l 0 -o $PassStart ${MAP_FILE} >> $LOGFILE 2>&1
-
-    /usr/local/bin/wxtoimg -m ${MAP_FILE} -e ZA $AUDIO_FILE ${IMAGE_DIR}/${FILEKEY}-ZA.png >> $LOGFILE 2>&1
-
-    /usr/local/bin/wxtoimg -m ${MAP_FILE} -e NO $AUDIO_FILE ${IMAGE_DIR}/${FILEKEY}-NO.png >> $LOGFILE 2>&1
-
-    /usr/local/bin/wxtoimg -m ${MAP_FILE} -e MSA $AUDIO_FILE ${IMAGE_DIR}/${FILEKEY}-MSA.png >> $LOGFILE 2>&1
-
-    /usr/local/bin/wxtoimg -m ${MAP_FILE} -e MCIR $AUDIO_FILE ${IMAGE_DIR}/${FILEKEY}-MCIR.png >> $LOGFILE 2>&1
-
-    /usr/local/bin/wxtoimg -m ${MAP_FILE} -e therm $AUDIO_FILE ${IMAGE_DIR}/${FILEKEY}-THERM.png >> $LOGFILE 2>&1
+    wxmap -T "${SAT}" -H $TLE_FILE -p 0 -l 0 -o $PassStart ${MAP_FILE} >> $LOGFILE 2>&1
+    wxtoimg -m ${MAP_FILE} -e ZA $AUDIO_FILE ${IMAGE_DIR}/${FILEKEY}-ZA.png >> $LOGFILE 2>&1
+    wxtoimg -m ${MAP_FILE} -e NO $AUDIO_FILE ${IMAGE_DIR}/${FILEKEY}-NO.png >> $LOGFILE 2>&1
+    wxtoimg -m ${MAP_FILE} -e MSA $AUDIO_FILE ${IMAGE_DIR}/${FILEKEY}-MSA.png >> $LOGFILE 2>&1
+    wxtoimg -m ${MAP_FILE} -e MCIR $AUDIO_FILE ${IMAGE_DIR}/${FILEKEY}-MCIR.png >> $LOGFILE 2>&1
+    wxtoimg -m ${MAP_FILE} -e therm $AUDIO_FILE ${IMAGE_DIR}/${FILEKEY}-THERM.png >> $LOGFILE 2>&1
 
     TLE1=`grep "$SAT" $TLE_FILE -A 2 | tail -2 | head -1 | tr -d '\r'`
     TLE2=`grep "$SAT" $TLE_FILE -A 2 | tail -2 | tail -1 | tr -d '\r'`
@@ -44,6 +48,12 @@ if [ -e $AUDIO_FILE ]
     CHAN_A=`grep "Channel A" $LOGFILE | head -1`
     CHAN_B=`grep "Channel B" $LOGFILE | head -1`
 
-    echo "node INSTALL_DIR/aws-s3/upload-wx-images.js \"$SAT\" $FREQ ${IMAGE_DIR}/${FILEKEY} $ELEVATION $DIRECTION $DURATION \"${TLE1}\" \"${TLE2}\" \"$GAIN\" \"${CHAN_A}\" \"${CHAN_B}\"" >> $LOGFILE 2>&1
-    node INSTALL_DIR/aws-s3/upload-wx-images.js "$SAT" $FREQ ${IMAGE_DIR}/${FILEKEY} $ELEVATION $DIRECTION $DURATION "${TLE1}" "${TLE2}" "$GAIN" "${CHAN_A}" "${CHAN_B}" >> $LOGFILE 2>&1
+    echo TLE1=$TLE1 > $METAFILE
+    echo TLE2=$TLE2 >> $METAFILE
+    echo GAIN=$GAIN >> $METAFILE
+    echo CHAN_A=$CHAN_A >> $METAFILE
+    echo CHAN_B=$CHAN_B >> $METAFILE
+    echo MAXELEV=$ELEVATION >> $METAFILE
+
+    ./upload.sh $FILEKEY >> $LOGFILE 2>&1
 fi
