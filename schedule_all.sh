@@ -2,6 +2,8 @@
 
 source ./config.env
 
+mkdir -p $OUT_DIR
+
 # Update Satellite Information
 
 wget -qr https://www.celestrak.com/NORAD/elements/weather.txt -O ${OUT_DIR}/weather.txt
