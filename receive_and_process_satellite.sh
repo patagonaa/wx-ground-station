@@ -27,6 +27,8 @@ mkdir -p $LOG_DIR
 
 echo $@ >> $LOGFILE
 
+echo Working Directory: $PWD >> $LOGFILE
+
 #/usr/local/bin/rtl_biast -b 1 2>> $LOGFILE
 sudo timeout $DURATION rtl_fm -f ${FREQ}M -s 60k -g 45 -p 0 -E wav -E deemp -F 9 - 2>> $LOGFILE | sox -t wav - $AUDIO_FILE rate 11025
 #/usr/local/bin/rtl_biast -b 0 2>> $LOGFILE
