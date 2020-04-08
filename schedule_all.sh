@@ -2,8 +2,6 @@
 
 source ./config.env
 
-echo Working Directory: $PWD
-
 mkdir -p $OUT_DIR
 
 # Update Satellite Information

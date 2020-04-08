@@ -37,14 +37,14 @@ while [ $END_EPOCH_DATE == `date +%D` ] || [ $END_EPOCH_DATE == `date --date="to
   # recording job will start early
   PASS_DURATION=`expr $END_EPOCH - $START_EPOCH`
   JOB_TIMER=`expr $PASS_DURATION + $SECONDS_REMAINDER`
-  OUTDATE=`date --date="TZ=\"UTC\" $START_TIME" +%Y%m%d-%H%M%S`
+  OUTDATE=`date -u --date="TZ=\"UTC\" $START_TIME" +%Y%m%d-%H%M%S`
 
   if [ $MAXELEV -ge $ELEVATION_THRESHOLD ]
     then
       FILEKEY="${OUTDATE}-${SAT//" "}"
       COMMAND="./receive_and_process_satellite.sh \"${SAT}\" $FREQ $FILEKEY $TLE_FILE $START_EPOCH $JOB_TIMER $MAXELEV $DIR"
-      echo $COMMAND
-      echo $COMMAND | at -M $JOB_START
+
+      echo $COMMAND | at -M $JOB_START 2> /dev/null
 
       TLE1=`grep "$SAT" $TLE_FILE -A 2 | tail -2 | head -1 | tr -d '\r'`
       TLE2=`grep "$SAT" $TLE_FILE -A 2 | tail -2 | tail -1 | tr -d '\r'`
