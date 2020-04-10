@@ -22,8 +22,11 @@ mkdir -p $LOG_DIR
 mkdir -p $IMAGE_DIR
 mkdir -p $META_DIR
 
+echo $@ >> $LOGFILE
+
 PassStart=`expr $START_TIME + 90`
 
+echo wxmap -T "${SAT}" -H $TLE_FILE -p 0 -l 0 -o $PassStart ${MAP_FILE} >> $LOGFILE 2>&1
 wxmap -T "${SAT}" -H $TLE_FILE -p 0 -l 0 -o $PassStart ${MAP_FILE} >> $LOGFILE 2>&1
 echo RAW >> $LOGFILE
 wxtoimg -m ${MAP_FILE} $WXTOIMG_ARGS $AUDIO_FILE ${IMAGE_DIR}/${FILEKEY}-RAW.png >> $LOGFILE 2>&1
