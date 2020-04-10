@@ -27,6 +27,6 @@ sudo timeout $DURATION rtl_fm -f ${FREQ}M -s 60k -E wav $SDR_FM_ARGS - 2>> $LOGF
 
 if [ -e $AUDIO_FILE ]
   then
-    ./process_satellite.sh $FILEKEY $START_TIME $SAT $ELEVATION
+    ./process_satellite.sh $FILEKEY $START_TIME $SAT $ELEVATION $TLE_FILE
     ./upload.sh $FILEKEY >> $LOGFILE 2>&1
 fi
