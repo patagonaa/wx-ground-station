@@ -23,6 +23,4 @@ rm -f ${OUT_DIR}/upcoming_passes.txt
 ./schedule_satellite.sh "NOAA 18" 137.9125
 ./schedule_satellite.sh "NOAA 15" 137.6200
 
-# upcoming_passes.txt could be uploaded somewhere here
-#  ${OUT_DIR}/upcoming_passes.txt
-
+./upload.sh

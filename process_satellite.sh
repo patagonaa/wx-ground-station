@@ -30,16 +30,8 @@ echo wxmap -T "${SAT}" -H $TLE_FILE -p 0 -l 0 -o $PassStart ${MAP_FILE} >> $LOGF
 wxmap -T "${SAT}" -H $TLE_FILE -p 0 -l 0 -o $PassStart ${MAP_FILE} >> $LOGFILE 2>&1
 echo RAW >> $LOGFILE
 wxtoimg -m ${MAP_FILE} $WXTOIMG_ARGS $AUDIO_FILE ${IMAGE_DIR}/${FILEKEY}-RAW.png >> $LOGFILE 2>&1
-echo ZA >> $LOGFILE
-wxtoimg -m ${MAP_FILE} $WXTOIMG_ARGS -e ZA $AUDIO_FILE ${IMAGE_DIR}/${FILEKEY}-ZA.png >> $LOGFILE 2>&1
-echo NO >> $LOGFILE
-wxtoimg -m ${MAP_FILE} $WXTOIMG_ARGS -e NO $AUDIO_FILE ${IMAGE_DIR}/${FILEKEY}-NO.png >> $LOGFILE 2>&1
-echo MSA >> $LOGFILE
-wxtoimg -m ${MAP_FILE} $WXTOIMG_ARGS -e MSA $AUDIO_FILE ${IMAGE_DIR}/${FILEKEY}-MSA.png >> $LOGFILE 2>&1
-echo MCIR >> $LOGFILE
-wxtoimg -m ${MAP_FILE} $WXTOIMG_ARGS -e MCIR $AUDIO_FILE ${IMAGE_DIR}/${FILEKEY}-MCIR.png >> $LOGFILE 2>&1
-echo THERM >> $LOGFILE
-wxtoimg -m ${MAP_FILE} $WXTOIMG_ARGS -e therm $AUDIO_FILE ${IMAGE_DIR}/${FILEKEY}-THERM.png >> $LOGFILE 2>&1
+
+parallel -k "echo {}; wxtoimg -m ${MAP_FILE} $WXTOIMG_ARGS -e {} $AUDIO_FILE ${IMAGE_DIR}/${FILEKEY}-{}.png 2>&1" ::: ZA NO MSA MCIR THERM >> $LOGFILE 2>&1
 
 TLE1=`grep "$SAT" $TLE_FILE -A 2 | tail -2 | head -1 | tr -d '\r'`
 TLE2=`grep "$SAT" $TLE_FILE -A 2 | tail -2 | tail -1 | tr -d '\r'`
