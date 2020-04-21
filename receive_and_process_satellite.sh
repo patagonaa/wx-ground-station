@@ -22,7 +22,7 @@ mkdir -p $LOG_DIR
 echo $@ >> $LOGFILE
 
 #/usr/local/bin/rtl_biast -b 1 2>> $LOGFILE
-sudo timeout $DURATION rtl_fm -f ${FREQ}M -s 60k -E wav $SDR_FM_ARGS - 2>> $LOGFILE | sox -t wav - $AUDIO_FILE rate 11025
+sudo timeout -k 30s $DURATION rtl_fm -f ${FREQ}M -s 60k -E wav $SDR_FM_ARGS - 2>> $LOGFILE | sox -t wav - $AUDIO_FILE rate 11025
 #/usr/local/bin/rtl_biast -b 0 2>> $LOGFILE
 
 if [ -e $AUDIO_FILE ]

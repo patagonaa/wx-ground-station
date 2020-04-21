@@ -23,4 +23,4 @@ rm -f ${OUT_DIR}/upcoming_passes.txt
 ./schedule_satellite.sh "NOAA 18" 137.9125
 ./schedule_satellite.sh "NOAA 15" 137.6200
 
-./upload.sh
+./upload.sh >> /dev/null
