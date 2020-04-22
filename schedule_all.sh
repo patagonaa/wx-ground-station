@@ -1,5 +1,9 @@
 #!/bin/bash
 
+source /etc/environment
+source /etc/profile
+source $HOME/.profile
+
 source ./config.env
 
 mkdir -p $OUT_DIR
