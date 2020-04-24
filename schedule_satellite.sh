@@ -42,7 +42,7 @@ while [ $END_EPOCH_DATE == `date +%D` ] || [ $END_EPOCH_DATE == `date --date="to
   if [ $MAXELEV -ge $ELEVATION_THRESHOLD ]
     then
       FILEKEY="${OUTDATE}-${SAT//" "}"
-      COMMAND="./receive_and_process_satellite.sh \"${SAT}\" $FREQ $FILEKEY $TLE_FILE $START_EPOCH $JOB_TIMER $MAXELEV $DIR"
+      COMMAND="./receive_and_process_satellite.sh \"${SAT}\" $FREQ $FILEKEY $TLE_FILE $START_EPOCH $END_EPOCH $JOB_TIMER $MAXELEV $DIR"
 
       echo $COMMAND | at -M $JOB_START 2> /dev/null
 

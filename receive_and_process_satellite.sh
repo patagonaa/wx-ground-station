@@ -5,9 +5,10 @@ FREQ=$2
 FILEKEY=$3
 TLE_FILE=$4
 START_TIME=$5
-DURATION=$6
-ELEVATION=$7
-DIRECTION=$8
+END_TIME=$6
+DURATION=$7
+ELEVATION=$8
+DIRECTION=$9
 
 source ./config.env
 
@@ -27,6 +28,6 @@ timeout -k 30s $DURATION rtl_fm -f ${FREQ}M -s 60k -E wav $SDR_FM_ARGS - 2>> $LO
 
 if [ -e $AUDIO_FILE ]
   then
-    ./process_satellite.sh $FILEKEY $START_TIME "$SAT" $ELEVATION $TLE_FILE
+    ./process_satellite.sh $FILEKEY $START_TIME $END_TIME "$SAT" $ELEVATION $TLE_FILE
     ./upload.sh $FILEKEY >> $LOGFILE 2>&1
 fi

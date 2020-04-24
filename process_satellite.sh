@@ -2,9 +2,10 @@
 
 FILEKEY=$1
 START_TIME=$2
-SAT=$3
-ELEVATION=$4
-TLE_FILE=$5
+END_TIME=$3
+SAT=$4
+ELEVATION=$5
+TLE_FILE=$6
 
 source ./config.env
 
@@ -40,6 +41,8 @@ CHAN_A=`grep "Channel A" $LOGFILE | head -1`
 CHAN_B=`grep "Channel B" $LOGFILE | head -1`
 
 echo START_TIME=$START_TIME > $METAFILE
+echo END_TIME=$END_TIME >> $METAFILE
+echo RECORD_END_TIME=`date -r $AUDIO_FILE +%s` >> $METAFILE
 echo TLE1=$TLE1 >> $METAFILE
 echo TLE2=$TLE2 >> $METAFILE
 echo GAIN=$GAIN >> $METAFILE
