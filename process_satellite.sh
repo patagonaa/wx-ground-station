@@ -30,10 +30,20 @@ PassStart=`expr $START_TIME + 90`
 echo wxmap -T "${SAT}" -H $TLE_FILE -p 0 -l 0 -o $PassStart ${MAP_FILE} >> $LOGFILE 2>&1
 wxmap -T "${SAT}" -H $TLE_FILE -p 0 -l 0 -o $PassStart ${MAP_FILE} >> $LOGFILE 2>&1
 echo RAW >> $LOGFILE
-wxtoimg -m ${MAP_FILE} $WXTOIMG_ARGS $AUDIO_FILE ${IMAGE_DIR}/${FILEKEY}-RAW.png >> $LOGFILE 2>&1
+wxtoimg -m ${MAP_FILE} $WXTOIMG_ARGS -p $AUDIO_FILE ${IMAGE_DIR}/${FILEKEY}-RAW.png >> $LOGFILE 2>&1
 
 parallel -k "echo {}; wxtoimg -m ${MAP_FILE} $WXTOIMG_ARGS -e {} $AUDIO_FILE ${IMAGE_DIR}/${FILEKEY}-{}.png 2>&1" ::: ZA NO MSA MCIR THERM >> $LOGFILE 2>&1
 
+echo Projections >> $LOGFILE
+wxproj -b $PROJECTION_BOUNDS -p mercator ${IMAGE_DIR}/${FILEKEY}-MSA.png ${IMAGE_DIR}/${FILEKEY}-MSA-merc.png >> $LOGFILE 2>&1 &
+wxproj -b $PROJECTION_BOUNDS -p stereographic ${IMAGE_DIR}/${FILEKEY}-MSA.png ${IMAGE_DIR}/${FILEKEY}-MSA-stereo.png >> $LOGFILE 2>&1 &
+
+wxproj -b $PROJECTION_BOUNDS -p mercator ${IMAGE_DIR}/${FILEKEY}-THERM.png ${IMAGE_DIR}/${FILEKEY}-THERM-merc.png >> $LOGFILE 2>&1 &
+wxproj -b $PROJECTION_BOUNDS -p stereographic ${IMAGE_DIR}/${FILEKEY}-THERM.png ${IMAGE_DIR}/${FILEKEY}-THERM-stereo.png >> $LOGFILE 2>&1 &
+
+wait
+
+echo Meta File >> $LOGFILE
 TLE1=`grep "$SAT" $TLE_FILE -A 2 | tail -2 | head -1 | tr -d '\r'`
 TLE2=`grep "$SAT" $TLE_FILE -A 2 | tail -2 | tail -1 | tr -d '\r'`
 GAIN=`grep Gain $LOGFILE | head -1`

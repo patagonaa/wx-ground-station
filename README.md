@@ -5,6 +5,8 @@ For full details of the project, see the [full project writeup on the Project La
 
 The scripting in this project is largely based on the excellent work by [Jim Haslett](https://www.youtube.com/user/JimHaslett) as described in his well-written Instructable, [Raspberry Pi NOAA Weather Satellite Receiver](https://www.instructables.com/id/Raspberry-Pi-NOAA-Weather-Satellite-Receiver/).
 
+This uses a "Professional Edition" Key to render projections of the received images. It can be obtained at https://wxtoimgrestored.xyz/ and has to be entered in ~/.wxtoimgrc
+
 ## Additional Dependencies
 Most dependencies are already described in the instructable above.
 The following are additionally needed:
