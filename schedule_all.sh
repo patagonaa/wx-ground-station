@@ -15,6 +15,9 @@ grep "NOAA 15" ${OUT_DIR}/weather.txt -A 2 > ${OUT_DIR}/weather.tle
 grep "NOAA 18" ${OUT_DIR}/weather.txt -A 2 >> ${OUT_DIR}/weather.tle
 grep "NOAA 19" ${OUT_DIR}/weather.txt -A 2 >> ${OUT_DIR}/weather.tle
 
+# wxmap has a parameter to use specific tle files, wxproj doesn't
+cp ${OUT_DIR}/weather.txt /usr/local/lib/wx/tle/weather.txt
+
 #Remove all AT jobs
 
 for i in `atq | awk '{print $1}'`;do atrm $i;done

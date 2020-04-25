@@ -43,6 +43,8 @@ wxproj -b $PROJECTION_BOUNDS -p stereographic ${IMAGE_DIR}/${FILEKEY}-THERM.png 
 
 wait
 
+find ${IMAGE_DIR} -name '*.png' -size 0 | xargs rm
+
 echo Meta File >> $LOGFILE
 TLE1=`grep "$SAT" $TLE_FILE -A 2 | tail -2 | head -1 | tr -d '\r'`
 TLE2=`grep "$SAT" $TLE_FILE -A 2 | tail -2 | tail -1 | tr -d '\r'`
