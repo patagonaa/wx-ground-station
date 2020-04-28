@@ -17,17 +17,17 @@ do
   curl --silent -X MKCOL ${WEBDAV_URL}/${dir}/${CURRENT_YEAR}/${CURRENT_MONTH} > /dev/null
 done
 
-for f in ${OUT_DIR}/meta/*; do
-  echo $f
-  FILE_YEAR=`basename -- $f | cut -c1-4`
-  FILE_MONTH=`basename -- $f | cut -c5-6`
-  curl --silent --fail --show-error -T $f ${WEBDAV_URL}/meta/${FILE_YEAR}/${FILE_MONTH}/`basename -- $f` && rm $f
-done
 for f in ${OUT_DIR}/images/*; do
   echo $f
   FILE_YEAR=`basename -- $f | cut -c1-4`
   FILE_MONTH=`basename -- $f | cut -c5-6`
   curl --silent --fail --show-error -T $f ${WEBDAV_URL}/images/${FILE_YEAR}/${FILE_MONTH}/`basename -- $f` && rm $f
+done
+for f in ${OUT_DIR}/meta/*; do
+  echo $f
+  FILE_YEAR=`basename -- $f | cut -c1-4`
+  FILE_MONTH=`basename -- $f | cut -c5-6`
+  curl --silent --fail --show-error -T $f ${WEBDAV_URL}/meta/${FILE_YEAR}/${FILE_MONTH}/`basename -- $f` && rm $f
 done
 for f in ${OUT_DIR}/audio/*; do
   echo $f
