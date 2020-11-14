@@ -11,8 +11,9 @@ curl --silent --fail --show-error -T ${OUT_DIR}/upcoming_passes.txt ${WEBDAV_URL
 CURRENT_YEAR=`date -u +"%Y"`
 CURRENT_MONTH=`date -u +"%m"`
 
-for dir in meta images audio
+for dir in meta images audio logs
 do
+  curl --silent -X MKCOL ${WEBDAV_URL}/${dir} > /dev/null
   curl --silent -X MKCOL ${WEBDAV_URL}/${dir}/${CURRENT_YEAR} > /dev/null
   curl --silent -X MKCOL ${WEBDAV_URL}/${dir}/${CURRENT_YEAR}/${CURRENT_MONTH} > /dev/null
 done
@@ -28,6 +29,12 @@ for f in ${OUT_DIR}/meta/*; do
   FILE_YEAR=`basename -- $f | cut -c1-4`
   FILE_MONTH=`basename -- $f | cut -c5-6`
   curl --silent --fail --show-error -T $f ${WEBDAV_URL}/meta/${FILE_YEAR}/${FILE_MONTH}/`basename -- $f` && rm $f
+done
+for f in ${OUT_DIR}/logs/*; do
+  echo $f
+  FILE_YEAR=`basename -- $f | cut -c1-4`
+  FILE_MONTH=`basename -- $f | cut -c5-6`
+  curl --silent --fail --show-error -T $f ${WEBDAV_URL}/logs/${FILE_YEAR}/${FILE_MONTH}/`basename -- $f` && rm $f
 done
 for f in ${OUT_DIR}/audio/*; do
   echo $f

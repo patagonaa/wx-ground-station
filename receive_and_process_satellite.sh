@@ -22,9 +22,14 @@ mkdir -p $LOG_DIR
 
 echo $@ >> $LOGFILE
 
+echo actual start time: `date +%s` >> $LOGFILE
+echo duration: $DURATION >> $LOGFILE
+
 #/usr/local/bin/rtl_biast -b 1 2>> $LOGFILE
 timeout -k 30s $DURATION rtl_fm -f ${FREQ}M -s 60k -E wav $SDR_FM_ARGS - 2>> $LOGFILE | sox -t wav - $AUDIO_FILE rate 11025
 #/usr/local/bin/rtl_biast -b 0 2>> $LOGFILE
+
+echo actual end time: `date +%s` >> $LOGFILE
 
 if [ -e $AUDIO_FILE ]
   then
